@@ -1,6 +1,6 @@
 import {products, setHeaders} from '../constants/api';
 import axios from 'axios';
-import { GENERIC_ERROR, ERROR_CREATING, ERROR_EDITING, ERROR_DELETING } from '../constants/defaultResponses';
+import { GENERIC_ERROR, ERROR_CREATING, ERROR_EDITING, ERROR_DELETING, ERROR_GETTING_ALL_PRODUCTS, ERROR_GETTING_PRODUCT } from '../constants/defaultResponses';
 
 export const GET_ALL_PRODUCTS = 'GET_ALL_PRODUCTS';
 export const GET_SPECIFIC_PRODUCT = 'GET_SPECIFIC_PRODUCT';
@@ -21,7 +21,7 @@ export function getProducts(){
         .catch(e => {
             return dispatch({
                 type: `${GET_ALL_PRODUCTS}_REJECTED`,
-                payload: GENERIC_ERROR
+                payload: ERROR_GETTING_ALL_PRODUCTS
             });
         });
     }
@@ -40,7 +40,7 @@ export function getSpecificProduct(id){
         .catch(e => {
             return dispatch({
                 type: `${GET_SPECIFIC_PRODUCT}_REJECTED`,
-                payload: GENERIC_ERROR
+                payload: ERROR_GETTING_PRODUCT
             });
         });
     }
