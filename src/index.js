@@ -7,13 +7,12 @@ import {Provider} from 'react-redux';
 import {createStore} from 'redux';
 import rootReducer from './reducers';
 import configureStore, { history } from './store/configureStore';
+import Root from './Root';
 
 const store = configureStore();
 
 ReactDOM.render(
-    <Provider store={store} history={history}>
-        <App />
-    </Provider>, 
+    <Root store={store} history={history} />, 
     document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change
