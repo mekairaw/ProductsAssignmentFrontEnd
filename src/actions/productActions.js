@@ -1,5 +1,6 @@
 import {products, setHeaders} from '../constants/api';
 import axios from 'axios';
+import {reset} from 'redux-form';
 import { GENERIC_ERROR, ERROR_CREATING, ERROR_EDITING, ERROR_DELETING, ERROR_GETTING_ALL_PRODUCTS, ERROR_GETTING_PRODUCT } from '../constants/defaultResponses';
 
 export const GET_ALL_PRODUCTS = 'GET_ALL_PRODUCTS';
@@ -7,6 +8,12 @@ export const GET_SPECIFIC_PRODUCT = 'GET_SPECIFIC_PRODUCT';
 export const CREATING_NEW_PRODUCT = 'CREATING_NEW_PRODUCT';
 export const EDITING_PRODUCT = 'EDITING_PRODUCT';
 export const DELETING_PRODUCT = 'DELETING_PRODUCT';
+
+export const OPENING_DELETE_MODAL = 'OPENING_DELETE_MODAL';
+export const CLOSING_DELETE_MODAL = 'CLOSING_DELETE_MODAL';
+
+export const SET_IS_VIEWING_PRODUCT = 'SET_IS_VIEWING_PRODUCT';
+export const SET_IS_EDITING_PRODUCT = 'SET_IS_EDITING_PRODUCT';
 
 export function getProducts(){
     return dispatch => {
@@ -52,10 +59,11 @@ export function creatingProduct(info){
         axios.post(products, JSON.stringify(info), {headers: setHeaders()})
         .then(response => {
             if(response.data.success === true){
-                return dispatch({
+                dispatch({
                     type: `${CREATING_NEW_PRODUCT}_FULFILLED`,
                     payload: response.data
                 });
+                return dispatch(reset('ProductForm'));
             }
             return dispatch({
                 type: `${CREATING_NEW_PRODUCT}_REJECTED`,
@@ -97,10 +105,11 @@ export function editingProduct(info){
     }
 }
 
-export function deletingProduct(id){
-    return dispatch => {
+export function deletingProduct(){
+    return (dispatch, getState) => {
         dispatch({type: `${DELETING_PRODUCT}_PENDING`});
-        axios.delete(`${products}/${id}`, {headers: setHeaders()})
+        const {deleteProductModal} = getState();
+        axios.delete(`${products}/${deleteProductModal.productId}`, {headers: setHeaders()})
         .then(response => {
             if(response.data.success === true){
                 dispatch({
@@ -120,5 +129,29 @@ export function deletingProduct(id){
                 payload: ERROR_DELETING
             });
         });
+    }
+}
+
+export function openingDeleteModal(id){
+    return dispatch => {
+        return dispatch({type: OPENING_DELETE_MODAL, payload: id});
+    }
+}
+
+export function closingDeleteModal(){
+    return dispatch => {
+        return dispatch({type: CLOSING_DELETE_MODAL});
+    }
+}
+
+export function setIsViewingProduct(){
+    return dispatch => {
+        return dispatch({type: SET_IS_VIEWING_PRODUCT})
+    }
+}
+
+export const setIsEditingProduct(){
+    return dispatch => {
+        return dispatch({type: SET_IS_EDITING_PRODUCT});
     }
 }
