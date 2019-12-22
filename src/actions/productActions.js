@@ -146,11 +146,11 @@ export function closingDeleteModal(){
 
 export function setIsViewingProduct(){
     return dispatch => {
-        return dispatch({type: SET_IS_VIEWING_PRODUCT})
+        return dispatch({type: SET_IS_VIEWING_PRODUCT});
     }
 }
 
-export const setIsEditingProduct(){
+export function setIsEditingProduct(){
     return dispatch => {
         return dispatch({type: SET_IS_EDITING_PRODUCT});
     }
