@@ -26,6 +26,7 @@ export function getProducts(){
             });
         })
         .catch(e => {
+            console.log(e)
             return dispatch({
                 type: `${GET_ALL_PRODUCTS}_REJECTED`,
                 payload: ERROR_GETTING_ALL_PRODUCTS

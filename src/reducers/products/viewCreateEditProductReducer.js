@@ -29,7 +29,7 @@ export default function ViewEditCreateProduct(state=INITIAL_STATE, action){
             return {...state, isProcessing: true};
         case `${CREATING_NEW_PRODUCT}_FULFILLED`:
             return {...state, isProcessing: false, successMessage: action.payload, errorCreating: false, errorMessage: ''};
-        case `${CREATING_NEW_PRODUCT_REJECTED}`:
+        case `${CREATING_NEW_PRODUCT}_REJECTED`:
             return {...state, isProcessing: false, errorCreating: true, errorMessage: action.payload, successMessage: ''};
         case `${EDITING_PRODUCT}_PENDING`:
             return {...state, isProcessing: true};
