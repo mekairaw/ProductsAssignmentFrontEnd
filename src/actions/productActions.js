@@ -14,6 +14,7 @@ export const CLOSING_DELETE_MODAL = 'CLOSING_DELETE_MODAL';
 
 export const SET_IS_VIEWING_PRODUCT = 'SET_IS_VIEWING_PRODUCT';
 export const SET_IS_EDITING_PRODUCT = 'SET_IS_EDITING_PRODUCT';
+export const SET_IS_CREATING_PRODUCT = 'SET_IS_CREATING_PRODUCT';
 
 export function getProducts(){
     return dispatch => {
@@ -41,7 +42,7 @@ export function getSpecificProduct(id){
         axios.get(`${products}/${id}`, {headers: setHeaders()})
         .then(response => {
             return dispatch({
-                type: `${GET_ALL_PRODUCTS}_FULFILLED`,
+                type: `${GET_SPECIFIC_PRODUCT}_FULFILLED`,
                 payload: response.data
             });
         })
@@ -57,6 +58,9 @@ export function getSpecificProduct(id){
 export function creatingProduct(info){
     return dispatch => {
         dispatch({type: `${CREATING_NEW_PRODUCT}_PENDING`});
+        if(!info.isActive){
+            info.isActive = false;
+        }
         axios.post(products, JSON.stringify(info), {headers: setHeaders()})
         .then(response => {
             if(response.data.success === true){
@@ -83,6 +87,9 @@ export function creatingProduct(info){
 export function editingProduct(info){
     return (dispatch, getState) => {
         dispatch({type: `${EDITING_PRODUCT}_PENDING`});
+        if(!info.isActive){
+            info.isActive = false;
+        }
         const {existingProductEdition} = getState();
         axios.put(`${products}/${existingProductEdition.product.id}`, JSON.stringify(info), {headers: setHeaders()})
         .then(response => {
@@ -154,5 +161,11 @@ export function setIsViewingProduct(){
 export function setIsEditingProduct(){
     return dispatch => {
         return dispatch({type: SET_IS_EDITING_PRODUCT});
+    }
+}
+
+export function setIsCreatingProduct(){
+    return dispatch => {
+        return dispatch({type: SET_IS_CREATING_PRODUCT});
     }
 }

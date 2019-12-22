@@ -12,7 +12,7 @@ import VisibilityIcon from '@material-ui/icons/Visibility';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 
-import {getProducts} from '../../actions/productActions';
+import {getProducts, deletingProduct, setIsEditingProduct, setIsViewingProduct, setIsCreatingProduct} from '../../actions/productActions';
 
 import {StyledTableCell, StyledTableRow, ColorButtonBlue} from '../../constants/customUIElements';
 
@@ -45,10 +45,22 @@ class ProductsLanding extends Component {
     }
     render() {
         const { classes } = this.props;
+        const handleViewProduct = (id) => {
+            this.props.setIsViewingProduct();
+            this.props.history.push(`/${id}`);
+        }
+        const handleEditProduct = (id) => {
+            this.props.setIsEditingProduct();
+            this.props.history.push(`/${id}`);
+        }
+        const handleCreateProduct = () => {
+            this.props.setIsCreatingProduct();
+            this.props.history.push('/create');
+        }
         return (
             <div>
                 <h2>Products</h2>
-                <ColorButtonBlue variant="contained" className={classes.button}>New Product</ColorButtonBlue>
+                <ColorButtonBlue variant="contained" className={classes.button} onClick={handleCreateProduct}>New Product</ColorButtonBlue>
                 <Paper  className={classes.root}>
                     <div className={classes.tableWrapper}>
                         <Table stickyHeader aria-label="Clients table" dense table size="medium">
@@ -85,10 +97,10 @@ class ProductsLanding extends Component {
                                         );
                                         })}
                                         <StyledTableCell align='center'>
-                                            <IconButton>
+                                            <IconButton onClick={() => handleViewProduct(row.id)}>
                                                 <VisibilityIcon/>
                                             </IconButton>
-                                            <IconButton>
+                                            <IconButton onClick={() => handleEditProduct(row.id)}>
                                                 <EditIcon/>
                                             </IconButton>
                                             <IconButton>
@@ -110,6 +122,10 @@ class ProductsLanding extends Component {
 ProductsLanding.propTypes = {
     products: PropTypes.array.isRequired,
     getProducts: PropTypes.func.isRequired,
+    deletingProduct: PropTypes.func.isRequired,
+    setIsEditingProduct: PropTypes.func.isRequired,
+    setIsViewingProduct: PropTypes.func.isRequired,
+    setIsCreatingProduct: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => {
@@ -118,7 +134,11 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = {
-    getProducts
+    getProducts,
+    deletingProduct,
+    setIsEditingProduct, 
+    setIsViewingProduct,
+    setIsCreatingProduct
 }
 
 export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(ProductsLanding));
