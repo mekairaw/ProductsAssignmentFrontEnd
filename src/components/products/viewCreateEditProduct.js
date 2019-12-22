@@ -48,7 +48,7 @@ class ViewCreateEditProduct extends Component {
     render() {
         const {handleSubmit, pristine, reset, submitting} = this.props;
         const handleReturnToTop = () => {
-            this.props.history.pop();
+            this.props.history.goBack();
         }
         return (
             <div>
