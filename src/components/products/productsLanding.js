@@ -12,7 +12,10 @@ import VisibilityIcon from '@material-ui/icons/Visibility';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 
-import {getProducts, deletingProduct, setIsEditingProduct, setIsViewingProduct, setIsCreatingProduct} from '../../actions/productActions';
+import DeleteProductDialog from './deleteProductDialog';
+
+import {getProducts, deletingProduct, setIsEditingProduct, setIsViewingProduct, setIsCreatingProduct,
+openingDeleteModal, closingDeleteModal} from '../../actions/productActions';
 
 import {StyledTableCell, StyledTableRow, ColorButtonBlue} from '../../constants/customUIElements';
 
@@ -57,10 +60,21 @@ class ProductsLanding extends Component {
             this.props.setIsCreatingProduct();
             this.props.history.push('/create');
         }
+        const handleDeleteOpen = (id) => {
+            this.props.openingDeleteModal(id);
+        }
+        const handleDeleteClose = () => {
+            this.props.closingDeleteModal();
+        }
+        const handleDeleteConfirmation = () => {
+            this.props.deletingProduct();
+        }
         return (
             <div>
                 <h2>Products</h2>
                 <ColorButtonBlue variant="contained" className={classes.button} onClick={handleCreateProduct}>New Product</ColorButtonBlue>
+                <DeleteProductDialog open={this.props.deleteProductModal.open} handleClose={handleDeleteClose}
+                isProcessing={this.props.deleteProductModal.isProcessing} handleConfirmation={handleDeleteConfirmation} />
                 <Paper  className={classes.root}>
                     <div className={classes.tableWrapper}>
                         <Table stickyHeader aria-label="Clients table" dense table size="medium">
@@ -103,7 +117,7 @@ class ProductsLanding extends Component {
                                             <IconButton onClick={() => handleEditProduct(row.id)}>
                                                 <EditIcon/>
                                             </IconButton>
-                                            <IconButton>
+                                            <IconButton onClick={() => handleDeleteOpen(row.id)}>
                                                 <DeleteIcon/>
                                             </IconButton>                    
                                         </StyledTableCell>
@@ -126,11 +140,14 @@ ProductsLanding.propTypes = {
     setIsEditingProduct: PropTypes.func.isRequired,
     setIsViewingProduct: PropTypes.func.isRequired,
     setIsCreatingProduct: PropTypes.func.isRequired,
+    openingDeleteModal: PropTypes.func.isRequired,
+    closingDeleteModal: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => {
     const {products} = state.productsList;
-    return {products};
+    const {deleteProductModal} = state;
+    return {products, deleteProductModal};
 }
 
 const mapDispatchToProps = {
@@ -138,7 +155,9 @@ const mapDispatchToProps = {
     deletingProduct,
     setIsEditingProduct, 
     setIsViewingProduct,
-    setIsCreatingProduct
+    setIsCreatingProduct,
+    openingDeleteModal,
+    closingDeleteModal,
 }
 
 export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(ProductsLanding));
