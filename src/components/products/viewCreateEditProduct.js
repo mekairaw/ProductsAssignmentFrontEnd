@@ -28,7 +28,7 @@ const validate = (values, props) => {
     if(values.productTypeId === 'Select product type'){
         errors.productTypeId = 'You MUST select a product Type.*';
     }
-    if(values.price === 0){
+    if(values.price === '0'){
         errors.price = 'Price need to be greater than 0.*'
     }
     if(values.name && values.name.length > 50){
