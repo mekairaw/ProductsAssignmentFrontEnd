@@ -15,7 +15,9 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import DeleteProductDialog from './deleteProductDialog';
 
 import {getProducts, deletingProduct, setIsEditingProduct, setIsViewingProduct, setIsCreatingProduct,
-openingDeleteModal, closingDeleteModal} from '../../actions/productActions';
+openingDeleteModal, closingDeleteModal, markErrorsAsRead} from '../../actions/productActions';
+
+import SnackBar from '../snackbar';
 
 import {StyledTableCell, StyledTableRow, ColorButtonBlue} from '../../constants/customUIElements';
 
@@ -69,12 +71,21 @@ class ProductsLanding extends Component {
         const handleDeleteConfirmation = () => {
             this.props.deletingProduct();
         }
+        const handleSnackBarClose = () => {
+            this.props.markErrorsAsRead();
+        }
         return (
             <div>
                 <h2>Products</h2>
                 <ColorButtonBlue variant="contained" className={classes.button} onClick={handleCreateProduct}>New Product</ColorButtonBlue>
                 <DeleteProductDialog open={this.props.deleteProductModal.open} handleClose={handleDeleteClose}
                 isProcessing={this.props.deleteProductModal.isProcessing} handleConfirmation={handleDeleteConfirmation} />
+                <SnackBar open={this.props.errorFetchingProducts} handleClose={handleSnackBarClose} variant={'error'} message={this.props.message} />
+                <SnackBar open={this.props.deleteProductModal.errorProcessing} handleClose={handleSnackBarClose} variant={'error'}
+                message={this.props.deleteProductModal.message} />
+                <SnackBar open={this.props.deleteProductModal.success} handleClose={handleSnackBarClose} variant={'success'}
+                message={this.props.deleteProductModal.message} />
+                {this.props.products.length > 0 ? (
                 <Paper  className={classes.root}>
                     <div className={classes.tableWrapper}>
                         <Table stickyHeader aria-label="Clients table" dense table size="medium">
@@ -127,7 +138,8 @@ class ProductsLanding extends Component {
                                 </TableBody>
                         </Table>
                     </div>
-                </Paper> 
+                </Paper>
+                ): <h2 style={{textAlign: 'center'}}>Hmmm, so empty here, let's add some products!</h2>}
             </div>
         );
     }
@@ -142,12 +154,13 @@ ProductsLanding.propTypes = {
     setIsCreatingProduct: PropTypes.func.isRequired,
     openingDeleteModal: PropTypes.func.isRequired,
     closingDeleteModal: PropTypes.func.isRequired,
+    markErrorsAsRead: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => {
-    const {products} = state.productsList;
+    const {products, errorFetchingProducts, message} = state.productsList;
     const {deleteProductModal} = state;
-    return {products, deleteProductModal};
+    return {products, deleteProductModal, errorFetchingProducts, message};
 }
 
 const mapDispatchToProps = {
@@ -158,6 +171,7 @@ const mapDispatchToProps = {
     setIsCreatingProduct,
     openingDeleteModal,
     closingDeleteModal,
+    markErrorsAsRead
 }
 
 export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(ProductsLanding));

@@ -6,12 +6,13 @@ import IconButton from '@material-ui/core/IconButton';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import indigo from '@material-ui/core/colors/indigo';
 
-import {creatingProduct, editingProduct, getSpecificProduct} from '../../actions/productActions';
+import {creatingProduct, editingProduct, getSpecificProduct, markErrorsAsRead} from '../../actions/productActions';
 import {getProductTypes} from '../../actions/productTypesActions';
 import { connect } from 'react-redux';
 import {Field, reduxForm} from 'redux-form';
 
 import {renderTextField, renderCheckbox, renderSelectField, ColorButtonBlue} from '../../constants/customUIElements';
+import Snackbar from '../snackbar';
 
 const validate = (values, props) => {
     const errors = {};
@@ -50,11 +51,16 @@ class ViewCreateEditProduct extends Component {
         const handleReturnToTop = () => {
             this.props.history.goBack();
         }
+        const handleSnackBarClose = () => {
+            this.props.markErrorsAsRead();
+        }
         return (
             <div>
                 <IconButton onClick={() => handleReturnToTop()}>
                   <ArrowBackIcon style={{color: indigo[500]}}/>
                 </IconButton>
+                <Snackbar open={this.props.specificProduct.error} handleClose={handleSnackBarClose} variant='error' message={this.props.specificProduct.message} />
+                <Snackbar open={this.props.specificProduct.success} handleClose={handleSnackBarClose} variant='success' message={this.props.specificProduct.message} />
                 <h2>{this.props.specificProduct.isViewing ? `Information for product: ${this.props.specificProduct.product ? this.props.specificProduct.product.name : ''}` :
                 this.props.specificProduct.isEditing ? `Information edit for product: ${this.props.specificProduct.product ? this.props.specificProduct.product.name : ''}` :
                 `Create new Product`}</h2>
@@ -132,6 +138,7 @@ ViewCreateEditProduct.propTypes = {
     getSpecificProduct: PropTypes.func.isRequired,
     getProductTypes: PropTypes.func.isRequired,
     specificProduct: PropTypes.object.isRequired,
+    markErrorsAsRead: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => {
@@ -144,7 +151,8 @@ const mapDispatchToProps = {
     creatingProduct, 
     editingProduct, 
     getSpecificProduct,
-    getProductTypes
+    getProductTypes,
+    markErrorsAsRead
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(reduxForm({form: 'ProductForm', validate, enableReinitialize: true})(ViewCreateEditProduct));
