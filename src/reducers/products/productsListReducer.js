@@ -1,10 +1,10 @@
-import {GET_ALL_PRODUCTS} from '../../actions/productActions';
+import {GET_ALL_PRODUCTS, MARK_ERROR_AS_READ} from '../../actions/productActions';
 
 const INITIAL_STATE = {
     products: [],
     isFetchingProducts: false,
     errorFetchingProducts: false,
-    errorMessage: ''
+    message: ''
 }
 
 export default function ProductsList(state=INITIAL_STATE, action){
@@ -12,9 +12,11 @@ export default function ProductsList(state=INITIAL_STATE, action){
         case `${GET_ALL_PRODUCTS}_PENDING`:
             return {...state, isFetchingProducts: true, errorFetchingProducts: false};
         case `${GET_ALL_PRODUCTS}_FULFILLED`:
-            return {...state, isFetchingProducts: false, errorFetchingProducts: false, errorMessage: '', products: action.payload}
+            return {...state, isFetchingProducts: false, errorFetchingProducts: false, message: '', products: action.payload}
         case `${GET_ALL_PRODUCTS}_REJECTED`:
-            return {...state, isFetchingProducts: false, errorFetchingProducts: true, errorMessage: action.payload, products: []};
+            return {...state, isFetchingProducts: false, errorFetchingProducts: true, message: action.payload, products: []};
+        case MARK_ERROR_AS_READ:
+            return {...state, errorFetchingProducts: false, message: ''};
         default:
             return state;
     }
