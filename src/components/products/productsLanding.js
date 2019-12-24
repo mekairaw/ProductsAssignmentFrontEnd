@@ -44,7 +44,7 @@ const styles = theme => ({
     }
 });
 
-class ProductsLanding extends Component {
+export class ProductsLanding extends Component {
     componentDidMount() {
         this.props.getProducts();
     }
@@ -86,7 +86,7 @@ class ProductsLanding extends Component {
                 <SnackBar open={this.props.deleteProductModal.success} handleClose={handleSnackBarClose} variant={'success'}
                 message={this.props.deleteProductModal.message} />
                 {this.props.products.length > 0 ? (
-                <Paper  className={classes.root}>
+                <Paper  className={classes.root} data-testid='list'>
                     <div className={classes.tableWrapper}>
                         <Table stickyHeader aria-label="Clients table" dense table size="medium">
                             <TableHead>
