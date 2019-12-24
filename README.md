@@ -22,4 +22,5 @@ This is my Products Assignment SPA. It connects with the API on [this repo](http
 - Once the project has been cloned and the packages installed, go to command propmt.
 - cd into the cloned repository.
 - In the command prompt execute 'npm test'.
+- If it tells you that it didn't find any tests, press a to find the test for the component 'ProductsLanding'.
 - The test should be executed successfully.
