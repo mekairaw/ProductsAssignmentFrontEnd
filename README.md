@@ -17,3 +17,9 @@ This is my Products Assignment SPA. It connects with the API on [this repo](http
 - Run the API for this app located on [this repo](https://github.com/mekairaw/ProductsAssignmentAPI).
 - In the command prompt execute 'npm start'.
 - Make use of the application.
+
+## How to Run the Tests.
+- Once the project has been cloned and the packages installed, go to command propmt.
+- cd into the cloned repository.
+- In the command prompt execute 'npm test'.
+- The test should be executed successfully.
